@@ -28,7 +28,7 @@ public class PersonDirectory extends javax.swing.JFrame {
     PreparedStatement pst=null;
     ResultSet rs=null;
     int q,i,deleteItem;
-    String name;
+    String n;
     
     public PersonDirectory() {
         initComponents();
@@ -50,19 +50,17 @@ public class PersonDirectory extends javax.swing.JFrame {
          recordTable.setRowCount(0);
          while (rs.next())
          {
-            Vector columnData = new Vector();
+            Object[] columnData = new Object[7];
             
-            for(i=1;i<=q;i++)
-            {
-                columnData.add(rs.getString("Name"));
-                columnData.add(rs.getShort("Age"));
-                columnData.add(rs.getString("Gender"));
-                columnData.add(rs.getString("Contactno"));
-                columnData.add(rs.getString("EmailID"));
-                columnData.add(rs.getString("Password"));
-                columnData.add(rs.getString("ConfirmPassword"));
+            
                 
-            }
+                columnData[0]=rs.getString("Name");
+                columnData[1]=rs.getShort("Age");
+                columnData[2]=rs.getString("Gender");
+                columnData[3]=rs.getString("Contactno");
+                columnData[4]=rs.getString("EmailID");
+                columnData[5]=rs.getString("Password");
+                columnData[6]=rs.getString("ConfirmPassword");
             recordTable.addRow(columnData);
          }
          
@@ -171,15 +169,7 @@ public class PersonDirectory extends javax.swing.JFrame {
             new String [] {
                 "Name", "Age", "Gender", "ContactNo", "EmailID", "Password", "ConfirmPassword"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
+        ));
         persondetailstbl.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 persondetailstblMouseClicked(evt);
@@ -308,6 +298,8 @@ public class PersonDirectory extends javax.swing.JFrame {
             model.setRowCount(0);
             while(rs.next())
             {
+                
+                
                 String name=String.valueOf(rs.getString("Name"));
                 String age=String.valueOf(rs.getInt("Age"));
                 String gender =String.valueOf(rs.getString("Gender"));
@@ -320,7 +312,7 @@ public class PersonDirectory extends javax.swing.JFrame {
                 
                 model.addRow(tbdata);
             }
-            sqlConn.close();
+           
         }
         
         catch(Exception e){
@@ -330,36 +322,38 @@ public class PersonDirectory extends javax.swing.JFrame {
 
     private void persondetailstblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_persondetailstblMouseClicked
         // TODO add your handling code here:
-        DefaultTableModel RecordTable = (DefaultTableModel) persondetailstbl.getModel();
+        DefaultTableModel recordTable = (DefaultTableModel) persondetailstbl.getModel();
         int SelectedRows= persondetailstbl.getSelectedRow();
         
-        nametxtp.setText(RecordTable.getValueAt(SelectedRows, 0).toString());
-        agetxtp.setText(RecordTable.getValueAt(SelectedRows, 1).toString());
-        gendertxtp.setText(RecordTable.getValueAt(SelectedRows, 2).toString());    
-        contactnotxtp.setText(RecordTable.getValueAt(SelectedRows, 3).toString());
-        emailidtxtp.setText(RecordTable.getValueAt(SelectedRows, 4).toString());
-        passwordtxtp.setText(RecordTable.getValueAt(SelectedRows, 5).toString());
-        confirmpasswordtxtp.setText(RecordTable.getValueAt(SelectedRows, 6).toString());
+        
+        nametxtp.setText(recordTable.getValueAt(SelectedRows, 0).toString());
+        agetxtp.setText(recordTable.getValueAt(SelectedRows, 1).toString());
+        gendertxtp.setText(recordTable.getValueAt(SelectedRows, 2).toString());    
+        contactnotxtp.setText(recordTable.getValueAt(SelectedRows, 3).toString());
+        emailidtxtp.setText(recordTable.getValueAt(SelectedRows, 4).toString());
+        passwordtxtp.setText(recordTable.getValueAt(SelectedRows, 5).toString());
+        confirmpasswordtxtp.setText(recordTable.getValueAt(SelectedRows, 6).toString());
         
     }//GEN-LAST:event_persondetailstblMouseClicked
 
     private void deletebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletebtnActionPerformed
         // TODO add your handling code here:
-         DefaultTableModel RecordTable = (DefaultTableModel) persondetailstbl.getModel();
+         DefaultTableModel recordTable = (DefaultTableModel) persondetailstbl.getModel();
         int SelectedRows= persondetailstbl.getSelectedRow();
         
         try{
-            name=RecordTable.getValueAt(SelectedRows, 0).toString();
+             n=(recordTable.getValueAt(SelectedRows, 0).toString());
             deleteItem=JOptionPane.showConfirmDialog(null, "Confirm if you want to delete an item","WARNING",JOptionPane.YES_NO_OPTION);
             if(deleteItem==JOptionPane.YES_OPTION)
             {
               Class.forName("com.mysql.cj.jdbc.Driver");
          sqlConn=DriverManager.getConnection(dataconn,username,password);
-         pst=sqlConn.prepareStatement("delete from persondetails where name=?");
-         pst.setString(1, name);
+         pst=sqlConn.prepareStatement("delete from persondetails where Name=?");
+         pst.setString(1, n);
          pst.executeUpdate();
          JOptionPane.showMessageDialog(this, "Record Deleted Successfully!!");
          upDateDb();
+         
          
          nametxtp.setText("");
          agetxtp.setText("");
@@ -375,6 +369,7 @@ public class PersonDirectory extends javax.swing.JFrame {
         catch(Exception e ){
             JOptionPane.showMessageDialog(null,e);
         }
+        
     }//GEN-LAST:event_deletebtnActionPerformed
 
     private void updatebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatebtnActionPerformed
@@ -383,8 +378,7 @@ public class PersonDirectory extends javax.swing.JFrame {
     {
         Class.forName("com.mysql.cj.jdbc.Driver");
          sqlConn=DriverManager.getConnection(dataconn,username,password);
-         pst=sqlConn.prepareStatement("update persondetails set Name=?,Age=?,Gender=?,ContactNo=?,EmailID=?,Password=?,ConfirmPassword=? ");
-         
+         pst=sqlConn.prepareStatement("update persondetails set Name=?"+nametxtp.getText()+",Age=?"+agetxtp.getText()+",Gender=?"+gendertxtp.getText()+",Contactno=?"+contactnotxtp.getText()+",EmailID=?"+emailidtxtp.getText()+",Password=?"+passwordtxtp.getText()+",ConfirmPassword=?"+confirmpasswordtxtp.getText()+ "where Name=?"+nametxtp.getText());
          pst.setString(1,nametxtp.getText());
          pst.setString(2, agetxtp.getText());
          pst.setString(3, gendertxtp.getText());  
@@ -399,8 +393,9 @@ public class PersonDirectory extends javax.swing.JFrame {
     }//GEN-LAST:event_updatebtnActionPerformed
 catch(Exception e){
         JOptionPane.showMessageDialog(null,e);
-    
+         
     }}
+        
     private void backbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbtnActionPerformed
         // TODO add your handling code here:
         

@@ -29,7 +29,7 @@ public class Patient extends javax.swing.JFrame {
     Connection sqlConn=null;
     PreparedStatement pst=null;
     ResultSet rs=null;
-    int q,i,id,deleteItem;
+    int q,i,deleteItem;
     public Patient() {
         initComponents();
     }
@@ -52,6 +52,12 @@ public class Patient extends javax.swing.JFrame {
             
             for(i=1;i<=q;i++)
             {
+                
+                columnData.add(rs.getString("Name"));
+                columnData.add(rs.getString("Age"));
+                columnData.add(rs.getString("Gender"));
+                columnData.add(rs.getString("ContactNo"));
+                columnData.add(rs.getString("EmailID"));
                 columnData.add(rs.getString("Date"));
                 columnData.add(rs.getString("MaritalStatus"));
                 columnData.add(rs.getString("Insurance"));
@@ -290,15 +296,20 @@ public class Patient extends javax.swing.JFrame {
     {
         Class.forName("com.mysql.cj.jdbc.Driver");
          sqlConn=DriverManager.getConnection(dataconn,username,password);
-         pst=sqlConn.prepareStatement("insert into patientdetails(date,maritalstatus,insurance,allergies,emergencycontact,medicalhistory,symptoms)values(?,?,?,?,?,?,?)");
+         pst=sqlConn.prepareStatement("insert into patientdetails(Name,Age,Gender,ContactNo,EmailID,date,maritalstatus,insurance,allergies,emergencycontact,medicalhistory,symptoms)values(?,?,?,?,?,?,?,?,?,?,?,?)");
          
-         pst.setString(1,datetxtpat.getText());
-         pst.setString(2, maritaltxtpat.getText());
-         pst.setString(3, insurancetxtpat.getText());       
-         pst.setString(4, allergiestxtpat.getText());
-         pst.setString(5, emergencytxtpat.getText());
-         pst.setString(6, medhisttxtpat.getText());
-         pst.setString(7, symptomstxtpat.getText());
+         pst.setString(1,namelblpat.getText());
+         pst.setString(2,agelblpat.getText());
+         pst.setString(3,genderlblpat.getText());
+         pst.setString(4,contactnolblpat.getText());
+         pst.setString(5,emailidlblpat.getText());
+         pst.setString(6,datetxtpat.getText());
+         pst.setString(7, maritaltxtpat.getText());
+         pst.setString(8, insurancetxtpat.getText());       
+         pst.setString(9, allergiestxtpat.getText());
+         pst.setString(10, emergencytxtpat.getText());
+         pst.setString(11, medhisttxtpat.getText());
+         pst.setString(12, symptomstxtpat.getText());
          
          
          if(datetxtpat.getText().equals("")){
@@ -342,7 +353,13 @@ public class Patient extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null,e);
     
         }
-        
+        datetxtpat.setText("");
+        maritaltxtpat.setText("");
+        insurancetxtpat.setText("");
+        allergiestxtpat.setText("");
+        emergencytxtpat.setText("");
+        medhisttxtpat.setText("");
+        symptomstxtpat.setText("");
     }//GEN-LAST:event_submitbtnpatActionPerformed
     
     /**

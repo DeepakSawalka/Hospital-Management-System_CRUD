@@ -29,7 +29,7 @@ public class Person extends javax.swing.JFrame {
     Connection sqlConn=null;
     PreparedStatement pst=null;
     ResultSet rs=null;
-    int q,i,id,deleteItem;
+    int q,i,deleteItem;
     public Person() {
         initComponents();
     }
@@ -48,20 +48,20 @@ public class Person extends javax.swing.JFrame {
          
          while (rs.next())
          {
-            Vector columnData = new Vector();
+            Object[] columnData = new Object[7];
             
-            for(i=1;i<=q;i++)
-            {
-                columnData.add(rs.getString("Name"));
-                columnData.add(rs.getShort("Age"));
-                columnData.add(rs.getString("Gender"));
-                columnData.add(rs.getString("Contactno"));
-                columnData.add(rs.getString("EmailID"));
-                columnData.add(rs.getString("Password"));
-                columnData.add(rs.getString("ConfirmPassword"));
+            
                 
+                columnData[0]=rs.getString("Name");
+                columnData[1]=rs.getShort("Age");
+                columnData[2]=rs.getString("Gender");
+                columnData[3]=rs.getString("Contactno");
+                columnData[4]=rs.getString("EmailID");
+                columnData[5]=rs.getString("Password");
+                columnData[6]=rs.getString("ConfirmPassword");
                 
-            }
+               
+            
             
          }
          
@@ -225,8 +225,7 @@ public class Person extends javax.swing.JFrame {
          
          pst.setString(1,nametxtr.getText());
          pst.setString(2, agetxtr.getText());
-         pst.setString(3, gendertxtr.getText());
-         
+         pst.setString(3, gendertxtr.getText());        
          pst.setString(4, contactnotxtr.getText());
          pst.setString(5, emailidtxtr.getText());
          pst.setString(6, passwordtxtr.getText());

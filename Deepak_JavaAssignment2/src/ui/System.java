@@ -33,6 +33,7 @@ public class System extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 204));
 
         persondetailsbtn.setText("Person Details");
         persondetailsbtn.addActionListener(new java.awt.event.ActionListener() {

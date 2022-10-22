@@ -4,6 +4,16 @@
  */
 package ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
+
 /**
  *
  * @author Deepak Sawalka
@@ -13,10 +23,65 @@ public class PatientDirectory extends javax.swing.JFrame {
     /**
      * Creates new form PatientDirectory
      */
+    private static final String username="root"; 
+    private static final String password="Rajkumar123#";
+    private static final String dataconn="jdbc:mysql://localhost:3306/connector";
+    
+    Connection sqlConn=null;
+    PreparedStatement pst=null;
+    ResultSet rs=null;
+    int q,i,deleteItem;
+    String n;
     public PatientDirectory() {
         initComponents();
     }
-
+public void upDateDb()
+    {
+    try
+    {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+         sqlConn=DriverManager.getConnection(dataconn,username,password);
+         pst=sqlConn.prepareStatement("select * from patientdetails");
+         
+         rs=pst.executeQuery();
+         ResultSetMetaData stData= rs.getMetaData();
+         q=stData.getColumnCount();
+         DefaultTableModel recordTable=(DefaultTableModel) patientdetailstbl.getModel();
+         recordTable.setRowCount(0);
+         
+         while (rs.next())
+         {
+            Vector columnData = new Vector();
+            
+            for(i=1;i<=q;i++)
+            {
+                
+                columnData.add(rs.getString("Name"));
+                columnData.add(rs.getString("Age"));
+                columnData.add(rs.getString("Gender"));
+                columnData.add(rs.getString("ContactNo"));
+                columnData.add(rs.getString("EmailID"));
+                columnData.add(rs.getString("Date"));
+                columnData.add(rs.getString("MaritalStatus"));
+                columnData.add(rs.getString("Insurance"));
+                columnData.add(rs.getString("Allergies"));
+                columnData.add(rs.getString("EmergencyContact"));
+                columnData.add(rs.getString("MedicalHistory"));
+                columnData.add(rs.getString("Symptoms"));
+                
+                
+            }
+            recordTable.addRow(columnData);
+            
+         }
+         
+} 
+    catch(Exception e){
+        JOptionPane.showMessageDialog(null,e);
+    
+    }
+    
+    }  
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,21 +91,442 @@ public class PatientDirectory extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        patientdetailstbl = new javax.swing.JTable();
+        viewbtnpatd = new javax.swing.JButton();
+        updatebtnpatd = new javax.swing.JButton();
+        deletebtnpatd = new javax.swing.JButton();
+        namelblpatd = new javax.swing.JLabel();
+        agelblpatd = new javax.swing.JLabel();
+        genderlblpatd = new javax.swing.JLabel();
+        contactnolblpatd = new javax.swing.JLabel();
+        nametxtpatd = new javax.swing.JTextField();
+        agetxtpatd = new javax.swing.JTextField();
+        gendertxtpatd = new javax.swing.JTextField();
+        contactnotxtpatd = new javax.swing.JTextField();
+        emailidlblpatd = new javax.swing.JLabel();
+        maritallblpatd = new javax.swing.JLabel();
+        insurancelblpatd = new javax.swing.JLabel();
+        datelblpatd = new javax.swing.JLabel();
+        emailidtxtpatd = new javax.swing.JTextField();
+        datetxtpatd = new javax.swing.JTextField();
+        maritaltxtpatd = new javax.swing.JTextField();
+        insurancetxtpatd = new javax.swing.JTextField();
+        allergieslblpatd = new javax.swing.JLabel();
+        emergencylblpatd = new javax.swing.JLabel();
+        medhistlblpatd = new javax.swing.JLabel();
+        symptomslblpatd = new javax.swing.JLabel();
+        allergiestxtpatd = new javax.swing.JTextField();
+        emergencytxtpatd = new javax.swing.JTextField();
+        medhisttxtpatd = new javax.swing.JTextField();
+        symptomstxtpatd = new javax.swing.JTextField();
+        backbtnpatd = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        patientdetailstbl.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Name", "Age", "Gender", "ContactNo", "EmailID", "Date", "MaritalStatus", "Insurance", "Allergies", "EmergencyContact", "MedicalHistory", "Symptoms"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        patientdetailstbl.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                patientdetailstblMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(patientdetailstbl);
+
+        viewbtnpatd.setText("VIEW");
+        viewbtnpatd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewbtnpatdActionPerformed(evt);
+            }
+        });
+
+        updatebtnpatd.setText("UPDATE");
+        updatebtnpatd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updatebtnpatdActionPerformed(evt);
+            }
+        });
+
+        deletebtnpatd.setText("DELETE");
+        deletebtnpatd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deletebtnpatdActionPerformed(evt);
+            }
+        });
+
+        namelblpatd.setText("Name");
+
+        agelblpatd.setText("Age");
+
+        genderlblpatd.setText("Gender");
+
+        contactnolblpatd.setText("Contact No");
+
+        nametxtpatd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nametxtpatdActionPerformed(evt);
+            }
+        });
+
+        emailidlblpatd.setText("Email ID");
+
+        maritallblpatd.setText("Marital Status");
+
+        insurancelblpatd.setText("Insurance");
+
+        datelblpatd.setText("Date");
+
+        allergieslblpatd.setText("Allergies");
+
+        emergencylblpatd.setText("Emergency Contact");
+
+        medhistlblpatd.setText("Medical History");
+
+        symptomslblpatd.setText("Symptoms");
+
+        allergiestxtpatd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                allergiestxtpatdActionPerformed(evt);
+            }
+        });
+
+        emergencytxtpatd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                emergencytxtpatdActionPerformed(evt);
+            }
+        });
+
+        backbtnpatd.setText("<<");
+        backbtnpatd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backbtnpatdActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 759, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(backbtnpatd)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(viewbtnpatd)
+                                .addGap(13, 13, 13))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(namelblpatd)
+                                    .addComponent(agelblpatd)
+                                    .addComponent(genderlblpatd)
+                                    .addComponent(contactnolblpatd))
+                                .addGap(33, 33, 33)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(agetxtpatd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(contactnotxtpatd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+                                                .addComponent(nametxtpatd, javax.swing.GroupLayout.Alignment.LEADING))
+                                            .addGap(133, 133, 133))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(gendertxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(243, 243, 243)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(331, 331, 331)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(datelblpatd)
+                                    .addComponent(emailidlblpatd)
+                                    .addComponent(insurancelblpatd)
+                                    .addComponent(maritallblpatd))
+                                .addGap(24, 24, 24)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(emailidtxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(119, 119, 119)
+                                        .addComponent(updatebtnpatd)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(89, 89, 89)
+                                        .addComponent(allergieslblpatd))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(111, 111, 111)
+                                        .addComponent(deletebtnpatd))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(datetxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(maritaltxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(insurancetxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(156, 156, 156)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(symptomslblpatd)
+                                    .addComponent(medhistlblpatd)
+                                    .addComponent(emergencylblpatd))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(allergiestxtpatd)
+                            .addComponent(emergencytxtpatd)
+                            .addComponent(medhisttxtpatd)
+                            .addComponent(symptomstxtpatd, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))
+                        .addGap(0, 155, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 562, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(backbtnpatd)
+                .addGap(101, 101, 101)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(viewbtnpatd)
+                            .addComponent(updatebtnpatd)
+                            .addComponent(deletebtnpatd))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(51, 51, 51)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(emailidlblpatd)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(nametxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(namelblpatd))
+                                                .addGap(38, 38, 38)
+                                                .addComponent(agelblpatd))))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(66, 66, 66)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(agetxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(datelblpatd))))
+                                .addGap(48, 48, 48)
+                                .addComponent(genderlblpatd))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(45, 45, 45)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(gendertxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(emailidtxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(allergieslblpatd)
+                                                    .addComponent(allergiestxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(29, 29, 29)
+                                                .addComponent(datetxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(emergencylblpatd)
+                                                .addComponent(emergencytxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(39, 39, 39)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(maritaltxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(maritallblpatd))
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(medhisttxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(medhistlblpatd)))))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addComponent(contactnolblpatd))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(insurancetxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(symptomslblpatd)
+                                    .addComponent(symptomstxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(insurancelblpatd)))))
+                    .addComponent(contactnotxtpatd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void updatebtnpatdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatebtnpatdActionPerformed
+        // TODO add your handling code here:
+         try
+    {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+         sqlConn=DriverManager.getConnection(dataconn,username,password);
+         pst=sqlConn.prepareStatement("update patientdetails set Name=?,Age=?,Gender=?,ContactNo=?,EmailID=?,Date=?,MaritalStatus=?,Insurance=?,Allergies=?,EmergencyContact=?,MedicalHistory=?,Symptoms=? where Name=?");
+         
+         
+         pst.setString(1,nametxtpatd.getText());
+         pst.setString(2, agetxtpatd.getText());
+         pst.setString(3, gendertxtpatd.getText());  
+         pst.setString(4, contactnotxtpatd.getText());
+         pst.setString(5, emailidtxtpatd.getText());
+         pst.setString(6, datetxtpatd.getText());
+         pst.setString(7, maritaltxtpatd.getText());
+         pst.setString(8, insurancetxtpatd.getText());
+         pst.setString(9,allergiestxtpatd.getText());
+         pst.setString(10, emergencytxtpatd.getText());
+         pst.setString(11, medhisttxtpatd.getText());
+         pst.setString(12, symptomstxtpatd.getText());
+         pst.executeUpdate();
+         JOptionPane.showMessageDialog(this,"Record Updated Successfully");
+         upDateDb();
+         
+    }                                         
+catch(Exception e){
+        JOptionPane.showMessageDialog(null,e);
+    
+    }
+    }//GEN-LAST:event_updatebtnpatdActionPerformed
+
+    private void deletebtnpatdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletebtnpatdActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel recordTable = (DefaultTableModel) patientdetailstbl.getModel();
+        int SelectedRows= patientdetailstbl.getSelectedRow();
+        
+        try{
+            n=recordTable.getValueAt(SelectedRows, 0).toString();
+            deleteItem=JOptionPane.showConfirmDialog(null, "Confirm if you want to delete an item","WARNING",JOptionPane.YES_NO_OPTION);
+            if(deleteItem==JOptionPane.YES_OPTION)
+            {
+              Class.forName("com.mysql.cj.jdbc.Driver");
+         sqlConn=DriverManager.getConnection(dataconn,username,password);
+         pst=sqlConn.prepareStatement("delete from patientdetails where Name=?");
+         pst.setString(1, n);
+         pst.executeUpdate();
+         JOptionPane.showMessageDialog(this, "Record Deleted Successfully!!");
+         upDateDb();
+         
+         nametxtpatd.setText("");
+         agetxtpatd.setText("");
+         gendertxtpatd.setText("");        
+         emailidtxtpatd.setText("");
+         contactnotxtpatd.setText("");
+         datetxtpatd.setText("");
+         maritaltxtpatd.setText("");
+         insurancetxtpatd.setText("");
+         allergiestxtpatd.setText("");
+         emergencytxtpatd.setText("");
+         medhisttxtpatd.setText("");
+         symptomstxtpatd.setText("");
+            }
+         
+         
+         
+            
+            
+        }
+        catch(Exception e ){
+            JOptionPane.showMessageDialog(null,e);
+        }
+        
+    }                                         
+
+    /*private void updatebtnActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        // TODO add your handling code here:
+      
+    }//GEN-LAST:event_deletebtnpatdActionPerformed
+*/
+    private void nametxtpatdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nametxtpatdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nametxtpatdActionPerformed
+
+    private void allergiestxtpatdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allergiestxtpatdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_allergiestxtpatdActionPerformed
+
+    private void emergencytxtpatdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emergencytxtpatdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_emergencytxtpatdActionPerformed
+
+    private void viewbtnpatdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewbtnpatdActionPerformed
+        // TODO add your handling code here:
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+         sqlConn=DriverManager.getConnection(dataconn,username,password);
+         pst=sqlConn.prepareStatement("select * from patientdetails");
+            
+             rs=pst.executeQuery();
+            DefaultTableModel model=(DefaultTableModel)patientdetailstbl.getModel();
+            model.setRowCount(0);
+            while(rs.next())
+            {
+                
+                String name=String.valueOf(rs.getString("Name"));
+                String age=String.valueOf(rs.getInt("Age"));
+                String gender =String.valueOf(rs.getString("Gender"));
+                String contactno=String.valueOf(rs.getString("ContactNo"));
+                String emailId=String.valueOf(rs.getString("EmailID"));
+                String date=String.valueOf(rs.getString("Date"));
+                String maritalstatus=String.valueOf(rs.getString("MaritalStatus"));
+                String insurance=String.valueOf(rs.getString("Insurance"));
+                String allergies=String.valueOf(rs.getString("Allergies"));
+                String emergencycontact=String.valueOf(rs.getString("EmergencyContact"));
+                String medhist=String.valueOf(rs.getString("MedicalHistory"));
+                String symptoms=String.valueOf(rs.getString("Symptoms"));
+                
+                String tbdata[]={name,age,gender,contactno,emailId,date,maritalstatus,insurance,allergies,emergencycontact,medhist,symptoms};
+                
+                model.addRow(tbdata);
+            }
+            sqlConn.close();
+        }
+        
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+    }//GEN-LAST:event_viewbtnpatdActionPerformed
+
+    private void backbtnpatdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbtnpatdActionPerformed
+        // TODO add your handling code here:
+        new System().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_backbtnpatdActionPerformed
+
+    private void patientdetailstblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patientdetailstblMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel recordTable = (DefaultTableModel) patientdetailstbl.getModel();
+        int SelectedRows= patientdetailstbl.getSelectedRow();
+        
+        
+        nametxtpatd.setText(recordTable.getValueAt(SelectedRows, 0).toString());
+        agetxtpatd.setText(recordTable.getValueAt(SelectedRows, 1).toString());
+        gendertxtpatd.setText(recordTable.getValueAt(SelectedRows, 2).toString());    
+        contactnotxtpatd.setText(recordTable.getValueAt(SelectedRows, 3).toString());
+        emailidtxtpatd.setText(recordTable.getValueAt(SelectedRows, 4).toString());
+        datetxtpatd.setText(recordTable.getValueAt(SelectedRows, 5).toString());
+        maritaltxtpatd.setText(recordTable.getValueAt(SelectedRows, 6).toString());
+        insurancetxtpatd.setText(recordTable.getValueAt(SelectedRows, 7).toString());
+        allergiestxtpatd.setText(recordTable.getValueAt(SelectedRows, 8).toString());
+        emergencytxtpatd.setText(recordTable.getValueAt(SelectedRows, 9).toString());
+        medhisttxtpatd.setText(recordTable.getValueAt(SelectedRows, 10).toString());
+        symptomstxtpatd.setText(recordTable.getValueAt(SelectedRows, 11).toString());
+    }//GEN-LAST:event_patientdetailstblMouseClicked
 
     /**
      * @param args the command line arguments
@@ -78,5 +564,35 @@ public class PatientDirectory extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel agelblpatd;
+    private javax.swing.JTextField agetxtpatd;
+    private javax.swing.JLabel allergieslblpatd;
+    private javax.swing.JTextField allergiestxtpatd;
+    private javax.swing.JButton backbtnpatd;
+    private javax.swing.JLabel contactnolblpatd;
+    private javax.swing.JTextField contactnotxtpatd;
+    private javax.swing.JLabel datelblpatd;
+    private javax.swing.JTextField datetxtpatd;
+    private javax.swing.JButton deletebtnpatd;
+    private javax.swing.JLabel emailidlblpatd;
+    private javax.swing.JTextField emailidtxtpatd;
+    private javax.swing.JLabel emergencylblpatd;
+    private javax.swing.JTextField emergencytxtpatd;
+    private javax.swing.JLabel genderlblpatd;
+    private javax.swing.JTextField gendertxtpatd;
+    private javax.swing.JLabel insurancelblpatd;
+    private javax.swing.JTextField insurancetxtpatd;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel maritallblpatd;
+    private javax.swing.JTextField maritaltxtpatd;
+    private javax.swing.JLabel medhistlblpatd;
+    private javax.swing.JTextField medhisttxtpatd;
+    private javax.swing.JLabel namelblpatd;
+    private javax.swing.JTextField nametxtpatd;
+    private javax.swing.JTable patientdetailstbl;
+    private javax.swing.JLabel symptomslblpatd;
+    private javax.swing.JTextField symptomstxtpatd;
+    private javax.swing.JButton updatebtnpatd;
+    private javax.swing.JButton viewbtnpatd;
     // End of variables declaration//GEN-END:variables
 }
